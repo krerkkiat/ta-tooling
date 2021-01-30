@@ -1,10 +1,28 @@
 # -*- coding: utf-8 -*-
+"""Various tools for TA."""
 import logging
 import os
 import re
+from pathlib import Path
 
 
 def get_unique_email_handles(path):
+    """
+    Return unique email handle in folder of submitted files.
+
+    :param path: A path to folder containing files extracted from downlaoded zip file.
+    :type path: str, pathlib.Path
+    :return: List of unique email handles.
+    :rtype: list[str]
+    :raises ValueError: When path is not a directory.
+    """
+
+    if isinstance(path, str):
+        path = Path(path)
+
+    if not path.is_dir():
+        raise ValueError(f"path ({path}) need to be a directory.")
+
     email_handle_pattern = re.compile(r"_(?P<email_handle>..\d{6})_attempt_")
 
     # Get all files.
@@ -25,13 +43,34 @@ def get_unique_email_handles(path):
 
 def categorize(source, destination):
     """
+    Group files from the same student together in a folder.
+
     Pre-condition: A root_directory is the result of the
     extracting a files out from the archive file from Blackboard.
 
-    Post-condition: In a root_directory, folders for each student
+    Post-condition: In the destination folder, folders for each student
     will be created, and a file will be moved into its corresponding
     folder.
+
+    :param source: A path to source directory.
+    :type source: str, pathlib.Path
+
+    :param destination: A path to destination directory.
+    :type destination: str, pathlib.Path
+
+    :raises ValueError: When path is not a directory.
     """
+
+    if isinstance(source, str):
+        source = Path(source)
+    if isinstance(destination, str):
+        destination = Path(destination)
+
+    if (not source.is_dir()) or (not destination.is_dir()):
+        raise ValueError(
+            f"source ({source}) or destination ({destination}) or both is not a directory"
+        )
+
     email_handle_pattern = re.compile(r"_(?P<email_handle>..\d{6})_attempt_")
     filename_pattern = re.compile(
         r"_attempt_(?:\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})*(?P<filename>.*)"
