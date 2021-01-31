@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="ta-tooling",
-    version="0.1",
+    version="0.2",
     description="Various tools for TA",
     long_description=long_description,
     long_description_content_type="text/markdown",
