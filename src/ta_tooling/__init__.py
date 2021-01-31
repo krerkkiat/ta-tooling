@@ -66,10 +66,8 @@ def categorize(source, destination):
     if isinstance(destination, str):
         destination = Path(destination)
 
-    if (not source.is_dir()) or (not destination.is_dir()):
-        raise ValueError(
-            f"source ({source}) or destination ({destination}) or both is not a directory"
-        )
+    if not source.is_dir():
+        raise ValueError(f"source ({source}) is not a directory")
 
     email_handle_pattern = re.compile(r"_(?P<email_handle>..\d{6})_attempt_")
     filename_pattern = re.compile(
@@ -80,8 +78,10 @@ def categorize(source, destination):
     unique_email_handles = get_unique_email_handles(source)
 
     # Create destination if not exist.
-    if not os.path.exists(destination):
+    if not destination.exists():
         os.mkdir(destination)
+    elif not destination.is_dir():
+        raise ValueError(f"destination ({destination}) exists and is not a directory")
 
     # Create folders in the destination.
     for email_handle in unique_email_handles:

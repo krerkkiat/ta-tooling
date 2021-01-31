@@ -20,7 +20,7 @@ def main():
 @click.argument(
     "destination",
     type=click.Path(
-        exists=True, file_okay=False, dir_okay=True, readable=True, writable=True
+        exists=False, file_okay=False, dir_okay=True, readable=True, writable=True
     ),
     required=True,
 )
