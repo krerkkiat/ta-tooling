@@ -19,8 +19,14 @@ setup(
     license="MIT",
     url="https://github.com/krerkkiat/ta-tooling",
     python_requires=">=3.8",
-    packages=find_packages(),
-    install_requires=["click>=7.1.2"],
+    package_dir={"": "src"},
+    packages=["ta_tooling", "bbutils"],
+    install_requires=[
+        "click>=7.1.2",
+        "flask>=1.1.2",
+        "flask-cors>=3.0.10",
+        "selenium>=3.141.0" "requests>=2.25.1",
+    ],
     include_package_data=True,
     zip_safe=False,
     entry_points={
