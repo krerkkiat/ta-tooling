@@ -10,6 +10,8 @@ $ python -m pip install ta-tooling
 
 ## Usage
 
+To group the submission files by email handle.
+
 ```console
-$ ta-tooling source-dir dest-dir
+$ ta-tooling categorize source-dir dest-dir
 ```
