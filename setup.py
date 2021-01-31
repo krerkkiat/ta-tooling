@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 setup(
     name="ta-tooling",
     version="0.1",
-    description="",
+    description="Various tools for TA",
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
@@ -20,12 +20,12 @@ setup(
     url="https://github.com/krerkkiat/ta-tooling",
     python_requires=">=3.8",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=["click>=7.1.2"],
     include_package_data=True,
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "ta-tooling=ta_tooling:main",
+            "ta-tooling=ta_tooling.cli:main",
         ]
     },
 )

@@ -120,19 +120,3 @@ def categorize(source, destination):
             )
         except OSError as ex:
             logging.error("{}".format(raw_filename))
-
-
-def main():
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("source", action="store")
-    parser.add_argument("dest", action="store")
-
-    args = parser.parse_args()
-
-    categorize(args.source, args.dest)
-
-
-if __name__ == "__main__":
-    main()
