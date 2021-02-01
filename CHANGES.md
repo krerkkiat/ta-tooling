@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+### 0.3.0
+
 - Add makefile wrapper package.
 
 ### 0.2

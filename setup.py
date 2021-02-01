@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="ta-tooling",
-    version="0.2",
+    version="0.3.0",
     description="Various tools for TA",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -20,12 +20,13 @@ setup(
     url="https://github.com/krerkkiat/ta-tooling",
     python_requires=">=3.8",
     package_dir={"": "src"},
-    packages=["ta_tooling", "bbutils"],
+    packages=["ta_tooling", "bbutils", "makefile"],
     install_requires=[
         "click>=7.1.2",
         "flask>=1.1.2",
         "flask-cors>=3.0.10",
-        "selenium>=3.141.0" "requests>=2.25.1",
+        "selenium>=3.141.0",
+        "requests>=2.25.1",
     ],
     include_package_data=True,
     zip_safe=False,
