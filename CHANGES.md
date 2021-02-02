@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Remove whitespace in the target name for makefile.
+
 ### 0.3.0
 
 - Add makefile wrapper package.

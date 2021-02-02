@@ -19,3 +19,8 @@ def test_reading_parsing(sample_file_path):
     t = Target.from_lines(["build: clean all archive"])
     assert len(t.dependencies) == 3
     assert t.name == "build"
+
+
+def test_target_with_space():
+    t = Target.from_lines(["all : a b c"])
+    assert t.name == "all"

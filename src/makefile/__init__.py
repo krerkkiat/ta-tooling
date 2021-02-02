@@ -7,7 +7,7 @@ class Target:
     """
 
     def __init__(self, name, dependencies, statements):
-        self.name = name
+        self.name = name.strip()
         self.dependencies = dependencies.strip().split(" ")
         self.statements = [s.strip() for s in statements]
 
@@ -66,9 +66,6 @@ class Makefile:
             self.lines = f.readlines()
 
     def parse(self):
-        """
-        TODO Target like "a : d", "d :" is skipped.
-        """
         targets = []
         target_lines = []
 
