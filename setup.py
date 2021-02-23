@@ -27,6 +27,8 @@ setup(
         "flask-cors>=3.0.10",
         "selenium>=3.141.0",
         "requests>=2.25.1",
+        "pandas>=1.2.2",
+        "python-dotenv>=0.15.0",
     ],
     include_package_data=True,
     zip_safe=False,

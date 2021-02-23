@@ -3,6 +3,8 @@
 ### Unreleased
 
 - Remove whitespace in the target name for makefile.
+- Support directly categorize from a ZIP file.
+- Add tools for extracting and downloading file submission
 
 ### 0.3.0
 

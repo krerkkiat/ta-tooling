@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common import exceptions
 
+
 class BbAPI:
     """
     Blackboard API.
@@ -25,7 +26,7 @@ class BbAPI:
         "attempt_files": "/learn/api/public/v1/courses/{course_id}/gradebook/attempts/{attempt_id}/files",
         "download_file": "/learn/api/public/v1/courses/{course_id}/gradebook/attempts/{attempt_id}/files/{attempt_file_id}/download",
         "questions": "/webapps/assessment/do/grade/viewQuestions?outcome_definition_id={outcome_definition_id}&course_id={course_id}",
-        "grade_questions": "/webapps/assessment/do/gradeQuestions?questionId={question_id}&course_id={course_id}&filter=ALL&outcomeDefinitionId={outcome_definition_id}&anonymousMode=false"
+        "grade_questions": "/webapps/assessment/do/gradeQuestions?questionId={question_id}&course_id={course_id}&filter=ALL&outcomeDefinitionId={outcome_definition_id}&anonymousMode=false",
     }
 
     HELPER_SCRIPT = """
@@ -49,13 +50,18 @@ window.get_url = function(url) {
         self._students_cache = []
 
     @classmethod
-    def get_firefox_profile(cls):
+    def get_firefox_profile(cls, temp_download_dir):
         profile = FirefoxProfile()
         profile.set_preference("browser.download.folderList", 2)
-        profile.set_preference("browser.download.dir", str(temp_download_dir.absolute()))
+        profile.set_preference(
+            "browser.download.dir", str(temp_download_dir.absolute())
+        )
         profile.set_preference("browser.download.useDownloadDir", True)
         profile.set_preference("browser.download.viewableInternally.enabledTypes", "")
-        profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/pdf;text/plain;application/text;text/xml;application/xml;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/rtf;application/vnd.rar;text/plain;image/webp;image/bmp;image/jpeg;application/x-7z-compressed;application/zip;application/x-tar;application/gzip;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/octet-stream;application/x-rar-compressed;application/x-zip-compressed;multipart/x-zip")
+        profile.set_preference(
+            "browser.helperApps.neverAsk.saveToDisk",
+            "application/pdf;text/plain;application/text;text/xml;application/xml;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/rtf;application/vnd.rar;text/plain;image/webp;image/bmp;image/jpeg;application/x-7z-compressed;application/zip;application/x-tar;application/gzip;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/octet-stream;application/x-rar-compressed;application/x-zip-compressed;multipart/x-zip",
+        )
         profile.set_preference("pdfjs.disabled", True)
         profile.update_preferences()
         return profile
@@ -83,12 +89,12 @@ window.get_url = function(url) {
         sign_in_btn.click()
 
         try:
-            WebDriverWait(self.driver, 10).until(
-                EC.url_contains("blackboard")
-            )
+            WebDriverWait(self.driver, 10).until(EC.url_contains("blackboard"))
         except exceptions.TimeoutException as e:
             # Username or password is incorrect.
-            raise ValueError("Username or password is incorrect. Still stuck at login page.")
+            raise ValueError(
+                "Username or password is incorrect. Still stuck at login page."
+            )
 
     def get_json(self, url):
         if self.is_firefox:
@@ -142,7 +148,9 @@ window.get_url = function(url) {
 
         TODO: This still needs to be supervised. It does sometimes miss the certain file type.
         """
-        download_dir = Path(self.driver.profile.default_preferences['browser.download.dir'])
+        download_dir = Path(
+            self.driver.profile.default_preferences["browser.download.dir"]
+        )
 
         try:
             self.driver.get(url)
@@ -154,7 +162,11 @@ window.get_url = function(url) {
                 with open(download_dir.joinpath(filename), "w") as f:
                     f.write(text)
 
-            elif url.lower().endswith(".jpg") or url.lower().endswith(".png") or url.lower().endswith(".jpeg"):
+            elif (
+                url.lower().endswith(".jpg")
+                or url.lower().endswith(".png")
+                or url.lower().endswith(".jpeg")
+            ):
                 target_image_url = self.driver.current_url
 
                 response = requests.get(target_image_url)
@@ -188,12 +200,14 @@ window.get_url = function(url) {
             quote_index_start = href.index("'", 0)
             quote_index_end = href.index("'", quote_index_start + 1)
 
-            questions.append({
-                "id": href[quote_index_start+1:quote_index_end],
-                "text": question_text,
-                "href": href,
-                "type": question_type,
-            })
+            questions.append(
+                {
+                    "id": href[quote_index_start + 1 : quote_index_end],
+                    "text": question_text,
+                    "href": href,
+                    "type": question_type,
+                }
+            )
 
         return questions
 
@@ -216,7 +230,9 @@ window.get_url = function(url) {
         self.driver.execute_async_script(self.HELPER_SCRIPT)
 
         url = self.API_SERVER_URL + self.RESOURCES["download_file"].format(
-            course_id=self.course_id, attempt_id=attempt_id, attempt_file_id=attempt_file_id
+            course_id=self.course_id,
+            attempt_id=attempt_id,
+            attempt_file_id=attempt_file_id,
         )
         print(url)
         self.driver.execute_async_script("window.get_url('" + url + "');")
