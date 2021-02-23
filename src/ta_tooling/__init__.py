@@ -4,6 +4,7 @@ import logging
 import os
 import re
 from pathlib import Path
+import zipfile
 
 
 def get_unique_email_handles(path):
@@ -20,13 +21,17 @@ def get_unique_email_handles(path):
     if isinstance(path, str):
         path = Path(path)
 
-    if not path.is_dir():
-        raise ValueError(f"path ({path}) need to be a directory.")
+    if not (path.is_dir() or zipfile.is_zipfile(path)):
+        raise ValueError(f"path ({path}) need to be a directory or a zip file.")
 
     email_handle_pattern = re.compile(r"_(?P<email_handle>..\d{6})_attempt_")
 
     # Get all files.
-    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    if zipfile.is_zipfile(path):
+        with zipfile.ZipFile(path, mode="r") as zip_f:
+            files = zip_f.namelist()
+    else:
+        files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
     email_handles = []
     # Extract handles.
@@ -66,8 +71,8 @@ def categorize(source, destination):
     if isinstance(destination, str):
         destination = Path(destination)
 
-    if not source.is_dir():
-        raise ValueError(f"source ({source}) is not a directory")
+    if not (source.is_dir() or zipfile.is_zipfile(source)):
+        raise ValueError(f"source ({source}) is not a directory nor a zip file")
 
     email_handle_pattern = re.compile(r"_(?P<email_handle>..\d{6})_attempt_")
     filename_pattern = re.compile(
@@ -89,7 +94,14 @@ def categorize(source, destination):
             os.mkdir(os.path.join(destination, email_handle))
 
     # Renaming and move files into directory.
-    files = [f for f in os.listdir(source) if os.path.isfile(os.path.join(source, f))]
+    if zipfile.is_zipfile(source):
+        zip_f = zipfile.ZipFile(source, mode="r")
+        files = zip_f.namelist()
+    else:
+        files = [
+            f for f in os.listdir(source) if os.path.isfile(os.path.join(source, f))
+        ]
+
     for raw_filename in files:
         logging.info(f"raw file name: {raw_filename}")
 
@@ -114,9 +126,19 @@ def categorize(source, destination):
 
         # Move file
         try:
-            os.rename(
-                os.path.join(source, raw_filename),
-                os.path.join(destination, email_handle, new_filename),
-            )
+            if zipfile.is_zipfile(source):
+                zip_f.extract(
+                    raw_filename,
+                    path=os.path.join(destination, email_handle),
+                )
+                os.rename(
+                    os.path.join(destination, email_handle, raw_filename),
+                    os.path.join(destination, email_handle, new_filename),
+                )
+            else:
+                os.rename(
+                    os.path.join(source, raw_filename),
+                    os.path.join(destination, email_handle, new_filename),
+                )
         except OSError as ex:
             logging.error("{}".format(raw_filename))

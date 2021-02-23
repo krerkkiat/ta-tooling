@@ -13,7 +13,7 @@ def main():
 @click.argument(
     "source",
     type=click.Path(
-        exists=True, file_okay=False, dir_okay=True, readable=True, writable=True
+        exists=True, file_okay=True, dir_okay=True, readable=True, writable=True
     ),
     required=True,
 )
