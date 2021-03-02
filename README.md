@@ -43,3 +43,8 @@ $ ta-tooling download-links users.json files.json
 
 Some files will not be automatically downloaded, in that case, you need to confirm the download manually
 (within certain time limit; otherwise, you will miss the window of file moving).
+
+## TODO
+
+- The `Accept-Origin` that the submission download for a question in a quiz is relying on is expected to be
+  tighten. The plan is to switch to the correct iframe, and execute javascript directly through selenium.
