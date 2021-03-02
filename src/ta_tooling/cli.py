@@ -64,7 +64,7 @@ def serve_inject():
     required=True,
 )
 def download_links(user_file, link_file):
-    load_dotenv()
+    load_dotenv(".env")
     course_id = os.getenv("COURSE_ID", None)
     username = os.getenv("BB_USERNAME", None)
     password = os.getenv("BB_PASSWORD", None)
@@ -127,7 +127,7 @@ def download_links(user_file, link_file):
 
 @click.command(help="Download the student list")
 def get_student_list():
-    load_dotenv()
+    load_dotenv(".env")
     course_id = os.getenv("COURSE_ID", None)
     username = os.getenv("BB_USERNAME", None)
     password = os.getenv("BB_PASSWORD", None)
