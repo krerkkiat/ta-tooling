@@ -60,7 +60,15 @@ window.get_url = function(url) {
         profile.set_preference("browser.download.viewableInternally.enabledTypes", "")
         profile.set_preference(
             "browser.helperApps.neverAsk.saveToDisk",
-            "application/pdf;text/plain;application/text;text/xml;application/xml;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/rtf;application/vnd.rar;text/plain;image/webp;image/bmp;image/jpeg;application/x-7z-compressed;application/zip;application/x-tar;application/gzip;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/octet-stream;application/x-rar-compressed;application/x-zip-compressed;multipart/x-zip;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.text",
+            "application/pdf;text/plain;application/text;text/xml;application/xml;"
+            + "application/vnd.openxmlformats-officedocument.wordprocessingml.document;"
+            + "application/rtf;application/vnd.rar;text/plain;image/webp;image/bmp;"
+            + "image/jpeg;application/x-7z-compressed;application/zip;application/x-tar;"
+            + "application/gzip;application/vnd.openxmlformats-officedocument.presentationml.presentation;"
+            + "application/octet-stream;application/x-rar-compressed;application/x-zip-compressed;"
+            + "multipart/x-zip;application/vnd.oasis.opendocument.presentation;"
+            + "application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.text"
+            + "application/tar;application/tar+gzip",
         )
         profile.set_preference("pdfjs.disabled", True)
         profile.update_preferences()

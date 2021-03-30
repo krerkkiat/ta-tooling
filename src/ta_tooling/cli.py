@@ -122,7 +122,7 @@ def download_links(user_file, link_file):
 
             sleep(1.3)
 
-    print("Working directory was {temp_working_dir}")
+    print(f"Working directory was {temp_working_dir}")
 
 
 @click.command(help="Download the student list")
