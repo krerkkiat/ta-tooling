@@ -1,6 +1,6 @@
 # TA Tooling
 
-Various tools for TA working with [Blackboard](https://www.blackboard.com/), a learning management system.
+Various tools for teaching assistant who is working with [Blackboard](https://www.blackboard.com/), a learning management system.
 
 ## Installation
 
