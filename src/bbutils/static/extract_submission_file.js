@@ -1,4 +1,8 @@
-// Select the ul element containing the list of submision.
+/* Select the ul element containing the list of submision.
+ *
+ * The compiled version of this script is meant to be injected into correct iframe
+ * of Blackboard.
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
