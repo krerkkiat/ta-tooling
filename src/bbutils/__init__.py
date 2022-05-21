@@ -28,7 +28,7 @@ class BbAPI:
     API_SERVER_URL = "https://blackboard.ohio.edu"
     RESOURCES = {
         "columns": "/learn/api/public/v1/courses/{course_id}/gradebook/columns",
-        "memberships": "/learn/api/public/v1/courses/{course_id}/users?fields=id,userId,user",
+        "memberships": "/learn/api/public/v1/courses/{course_id}/users?fields=id,userId,user,courseRoleId",
         "attempts": "/learn/api/public/v1/courses/{course_id}/gradebook/columns/{column_id}/attempts",
         "attempt_files": "/learn/api/public/v1/courses/{course_id}/gradebook/attempts/{attempt_id}/files",
         "download_file": "/learn/api/public/v1/courses/{course_id}/gradebook/attempts/{attempt_id}/files/{attempt_file_id}/download",
@@ -181,7 +181,11 @@ window.get_url = function(url) {
             course_id=self.course_id
         )
         data = self.get_json(target_url)
-        self._students_cache = data["results"]
+        student_objects = [
+            obj for obj in data["results"] if obj["courseRoleId"] == "Student"
+        ]
+
+        self._students_cache = student_objects
         return self._students_cache
 
     def get_file(self, url):
