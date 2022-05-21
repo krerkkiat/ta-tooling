@@ -22,7 +22,7 @@ In version 0.3.x the support for categorizing directly from a ZIP file is added.
 
 ### Download file submitted for a question in a quiz
 
-Note: Currently, only Firefox is suppoted, and webdriver is needed.
+Note: Currently, only Firefox is supported, and webdriver is needed.
 
 To download file submitted as an answer to a question in a quiz, first get the links by injecting the extraction code. To get the extraction code (and start the server for the code to call back to).
 
@@ -48,3 +48,4 @@ Some files will not be automatically downloaded, in that case, you need to confi
 
 - The `Accept-Origin` that the submission download for a question in a quiz is relying on is expected to be
   tighten. The plan is to switch to the correct iframe, and execute javascript directly through selenium.
+- (serve-inject) The script injected to the page will get

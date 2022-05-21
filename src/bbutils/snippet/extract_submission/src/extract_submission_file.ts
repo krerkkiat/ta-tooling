@@ -1,4 +1,8 @@
-// Select the ul element containing the list of submision.
+/* Select the ul element containing the list of submision.
+ *
+ * The compiled version of this script is meant to be injected into correct iframe
+ * of Blackboard.
+ */
 
 interface Entry {
     name: string;
