@@ -103,7 +103,7 @@ def categorize(source, destination):
         ]
 
     for raw_filename in files:
-        logging.info(f"raw file name: {raw_filename}")
+        logging.info("raw file name: %s" % raw_filename)
 
         # Renaming.
         res = filename_pattern.findall(raw_filename)
@@ -111,7 +111,7 @@ def categorize(source, destination):
         if len(res) != 0:
             filename = res[0]
 
-        logging.info(f"file name: {filename}")
+        logging.info("file name: %s" % filename)
 
         new_filename = ""
         if filename == ".txt":
@@ -119,7 +119,7 @@ def categorize(source, destination):
         else:
             new_filename = filename[1:]
 
-        logging.info(f"new file name: {new_filename}")
+        logging.info("new file name: %s" % new_filename)
 
         # Get email handle.
         email_handle = email_handle_pattern.findall(raw_filename)[0]
@@ -141,4 +141,7 @@ def categorize(source, destination):
                     os.path.join(destination, email_handle, new_filename),
                 )
         except OSError as ex:
-            logging.error("{}".format(raw_filename))
+            logging.error("oserror while operting on %s" % raw_filename)
+
+    if zipfile.is_zipfile(source):
+        zip_f.close()

@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from time import sleep
 from urllib.parse import urlparse
+from typing import Optional
 
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
@@ -16,6 +17,12 @@ from selenium.common import exceptions
 class BbAPI:
     """
     Blackboard API.
+
+    Since the chance of legitamately build application for Blackboard
+    and have it approved by OIT to be added to the deployed Blackboard
+    at Ohio University is slim, this API client use selenium web testing
+    framework to imitate user and sending request to the API endpoints
+    using logged in user session.
     """
 
     API_SERVER_URL = "https://blackboard.ohio.edu"
@@ -40,8 +47,11 @@ window.get_url = function(url) {
     LOGIN_SLEEP_TIME = 5
 
     def __init__(self, course_id, driver):
-        self.course_id = course_id
         self.driver = driver
+        if course_id.startswith("http"):
+            self.course_id = BbAPI.parse_url_for_course_id(course_id)
+        else:
+            self.course_id = course_id
 
         self.is_firefox = False
         if driver.capabilities["browserName"] == "firefox":
@@ -50,7 +60,29 @@ window.get_url = function(url) {
         self._students_cache = []
 
     @classmethod
+    def parse_url_for_course_id(cls, url: str) -> Optional[str]:
+        tokens = url.split("/")
+
+        try:
+            course_kw_pos = tokens.index("courses")
+            if len(tokens) < course_kw_pos + 1:
+                return None
+            return tokens[course_kw_pos + 1]
+        except ValueError:
+            return None
+
+    @classmethod
     def get_firefox_profile(cls, temp_download_dir):
+        """
+        Return a special Firefox profile.
+
+        The profile is used to skip download confirm dialog for most file types
+        in homework submission. The profile also relocate the download
+        directory to the temporary location.
+
+        To prevent PDF viewer to show the PDF file instead of downloading it,
+        the profile also disable the pdfjs.
+        """
         profile = FirefoxProfile()
         profile.set_preference("browser.download.folderList", 2)
         profile.set_preference(
@@ -97,7 +129,8 @@ window.get_url = function(url) {
         sign_in_btn.click()
 
         try:
-            WebDriverWait(self.driver, 10).until(EC.url_contains("blackboard"))
+            # User may have to approve MFA.
+            WebDriverWait(self.driver, 60).until(EC.url_contains("blackboard"))
         except exceptions.TimeoutException as e:
             # Username or password is incorrect.
             raise ValueError(
@@ -105,6 +138,11 @@ window.get_url = function(url) {
             )
 
     def get_json(self, url):
+        """
+        Return JSON.
+
+        Handle the different between Firefox and Chrome.
+        """
         if self.is_firefox:
             url = "view-source:" + url
 

@@ -70,7 +70,11 @@ def download_links(user_file, link_file):
     password = os.getenv("BB_PASSWORD", None)
 
     if course_id is None:
-        course_id = input("Course ID: ")
+        text = input("Course ID: ")
+        if text.startswith("http"):
+            course_id = BbAPI.parse_url_for_course_id(text)
+        else:
+            course_id = text
     if username is None:
         username = input("Username: ")
     if password is None:
@@ -136,7 +140,11 @@ def get_student_list():
     driver = webdriver.Firefox()
 
     if course_id is None:
-        course_id = input("Course ID: ")
+        text = input("Course ID: ")
+        if text.startswith("http"):
+            course_id = BbAPI.parse_url_for_course_id(text)
+        else:
+            course_id = text
     if username is None:
         username = input("Username: ")
     if password is None:

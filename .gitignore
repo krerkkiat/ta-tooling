@@ -194,3 +194,6 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/python,emacs
+
+# KC - generated files
+users*.csv
