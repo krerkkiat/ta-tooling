@@ -7,6 +7,7 @@ from typing import Optional
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import requests
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.support.ui import WebDriverWait
@@ -117,15 +118,15 @@ window.get_url = function(url) {
         # input#idSIButton9 for Next button.  //*[@id="idSIButton9"]
         # input#i0118 for password.  //*[@id="i0118"]
         sleep(self.LOGIN_SLEEP_TIME)
-        username_txt = self.driver.find_element_by_xpath('//*[@id="i0116"]')
+        username_txt = self.driver.find_element(By.XPATH, '//*[@id="i0116"]')
         username_txt.send_keys(username)
-        next_btn = self.driver.find_element_by_xpath('//*[@id="idSIButton9"]')
+        next_btn = self.driver.find_element(By.XPATH, '//*[@id="idSIButton9"]')
         next_btn.click()
         sleep(self.LOGIN_SLEEP_TIME)
-        password_txt = self.driver.find_element_by_xpath('//*[@id="i0118"]')
+        password_txt = self.driver.find_element(By.XPATH, '//*[@id="i0118"]')
         password_txt.send_keys(password)
         sleep(self.LOGIN_SLEEP_TIME)
-        sign_in_btn = self.driver.find_element_by_xpath('//*[@id="idSIButton9"]')
+        sign_in_btn = self.driver.find_element(By.XPATH, '//*[@id="idSIButton9"]')
         sign_in_btn.click()
 
         try:
@@ -147,7 +148,7 @@ window.get_url = function(url) {
             url = "view-source:" + url
 
         self.driver.get(url)
-        pre = self.driver.find_element_by_tag_name("pre").text
+        pre = self.driver.find_element(By.TAG_NAME, "pre").text
         data = json.loads(pre)
         return data
 
@@ -207,7 +208,7 @@ window.get_url = function(url) {
 
             filename = Path(urlparse(url).path).name
             if url.endswith(".txt"):
-                text = self.driver.find_element_by_tag_name("pre").text
+                text = self.driver.find_element(By.TAG_NAME, "pre").text
 
                 with open(download_dir.joinpath(filename), "w") as f:
                     f.write(text)
@@ -238,14 +239,16 @@ window.get_url = function(url) {
             course_id=self.course_id, outcome_definition_id=column_id
         )
         self.driver.get(target_url)
-        tbody = self.driver.find_element_by_id("listContainer_databody")
-        rows = tbody.find_elements_by_xpath(".//tr")
+        tbody = self.driver.find_element(By.ID, "listContainer_databody")
+        rows = tbody.find_elements(By.XPATH, ".//tr")
 
         questions = []
         for row in rows:
-            question_text = row.find_elements_by_xpath(".//th/p")[0].text
-            href = row.find_elements_by_xpath(".//td[4]/span/a")[0].get_property("href")
-            question_type = row.find_elements_by_xpath(".//td[2]/span")[0].text
+            question_text = row.find_elements(By.XPATH, ".//th/p")[0].text
+            href = row.find_elements(By.XPATH, ".//td[4]/span/a")[0].get_property(
+                "href"
+            )
+            question_type = row.find_elements(By.XPATH, ".//td[2]/span")[0].text
 
             quote_index_start = href.index("'", 0)
             quote_index_end = href.index("'", quote_index_start + 1)
@@ -266,7 +269,7 @@ window.get_url = function(url) {
             course_id=self.course_id, attempt_id=attempt_id
         )
         self.driver.get(target_url)
-        pre = self.driver.find_element_by_tag_name("pre").text
+        pre = self.driver.find_element(By.TAG_NAME, "pre").text
         data = json.loads(pre)
 
         return data["results"]
