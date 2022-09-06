@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ta-tooling"
-version = "0.3.1"
+version = "0.3.2"
 authors = [{name = "Krerkkiat Chusap", email = "kc555014@ohio.edu"}]
 description="Various tools for TA"
 readme = "README.md"
